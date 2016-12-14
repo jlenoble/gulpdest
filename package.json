@@ -32,6 +32,7 @@
     "chai-as-promised": "^6.0.0",
     "cleanup-wrapper": "^0.2.0",
     "del": "^2.2.1",
+    "equal-stream-contents": "^0.1.1",
     "eslint-config-google": "^0.7.0",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "gulp-babel": "^6.1.2",

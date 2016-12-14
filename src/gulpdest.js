@@ -2,14 +2,23 @@ import SimpleGulpDest from './simple-gulpdest';
 import {PolytonFactory} from 'polyton';
 import GulpGlob from 'gulpglob';
 import path from 'path';
+import isString from 'is-string';
 
 const GulpDest = PolytonFactory(SimpleGulpDest, ['literal'], undefined, {
   preprocess: function (args) {
     let preArgs = [];
     args.forEach(dest => {
-      const dst = path.relative(process.cwd(), dest[0]);
-      if (!preArgs.includes(dst)) {
-        preArgs.push(dst);
+      let dst = dest[0];
+      if (dest.length !== 1) {
+        dst = dest;
+      }
+      if (isString(dst) && dst !== '') {
+        dst = path.relative(process.cwd(), dst);
+        if (!preArgs.includes(dst)) {
+          preArgs.push(dst);
+        }
+      } else {
+        throw new TypeError('Invalid dest element: "' + dst + '"');
       }
     });
     return preArgs.map(arg => [arg]);

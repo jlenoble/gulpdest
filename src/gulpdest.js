@@ -5,7 +5,8 @@ import path from 'path';
 import isString from 'is-string';
 
 const GulpDest = PolytonFactory(SimpleGulpDest, ['literal'], [{
-  unordered: true}], {
+  unordered: true,
+}], {
   preprocess: function (args) {
     let preArgs = [];
     args.forEach(dest => {

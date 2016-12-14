@@ -46,4 +46,24 @@ describe('GulpDest is a class encapsulting gulp.dest', function() {
     });
   }));
 
+  it('A GulpDest instance wraps unordered dests', tmpDir(['tmp1', 'tmp2'],
+  function() {
+    const dests = ['tmp2', 'tmp1'];
+    const revDests = ['tmp1', 'tmp2'];
+
+    const dst = new GulpDest(...dests);
+    const revDst = new GulpDest(...revDests);
+
+    expect(dst).to.equal(revDst);
+
+    const glob = 'src/**/*.js';
+    const stream = gulp.src(glob);
+    const glb = dst.dest(stream, glob);
+
+    return glb.toPromise().then(globs => {
+      expect(globs.map(glb => glb.glob))
+        .to.eql(dests.map(dest => [path.join(dest, glob)]));
+    });
+  }));
+
 });

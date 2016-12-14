@@ -4,7 +4,8 @@ import GulpGlob from 'gulpglob';
 import path from 'path';
 import isString from 'is-string';
 
-const GulpDest = PolytonFactory(SimpleGulpDest, ['literal'], undefined, {
+const GulpDest = PolytonFactory(SimpleGulpDest, ['literal'], [{
+  unordered: true}], {
   preprocess: function (args) {
     let preArgs = [];
     args.forEach(dest => {

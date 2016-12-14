@@ -6,6 +6,7 @@ import streamToPromise from 'stream-to-promise';
 
 export function validArgs() {
   return [
+    'tmp',
     'build1',
     path.join(process.cwd(), 'build2'),
     '/tmp/gulpdest-' + (new Date()).getTime()

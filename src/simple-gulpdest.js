@@ -2,6 +2,7 @@ import isString from 'is-string';
 import gulp from 'gulp';
 import path from 'path';
 import GulpGlob from 'gulpglob';
+import destglob from 'destglob';
 
 class SimpleGulpDest {
 
@@ -32,18 +33,7 @@ class SimpleGulpDest {
   }
 
   _globArgs (stream, originalGlob) {
-    const glob = Array.isArray(originalGlob) ? originalGlob : [originalGlob];
-    return [
-      glob.map(glb => {
-        let a = glb.split('**');
-        a[0] = path.join(this.destination, a[0]);
-
-        if (a.length === 1) {
-          return a[0];
-        } else {
-          return path.join(a[0], '**', a[1]);
-        }
-      }), {
+    return [destglob(originalGlob, this.destination), {
         ready: () => {
           return new Promise((resolve, reject) => {
             stream.pipe(gulp.dest(this.destination))

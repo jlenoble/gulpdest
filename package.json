@@ -45,6 +45,7 @@
     "plumb-gulp": "^0.1.0"
   },
   "dependencies": {
+    "destglob": "^0.1.0",
     "gulpglob": "^0.2.3",
     "is-string": "^1.0.4"
   }

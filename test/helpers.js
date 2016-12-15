@@ -22,10 +22,3 @@ export function invalidArgs() {
     42
   ];
 };
-
-export function equalFileContents(glb, dest, pipe = noop) {
-  return streamToPromise(gulp.src(glb, {base: process.cwd()})
-    .pipe(pipe())
-    .pipe(diff(dest))
-    .pipe(diff.reporter({fail: true})));
-};

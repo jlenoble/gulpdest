@@ -2,8 +2,9 @@ import path from 'path';
 import gulp from 'gulp';
 import {expect} from 'chai';
 import GulpDest from '../src/gulpdest';
-import {invalidArgs, validArgs, equalFileContents} from './helpers';
+import {invalidArgs, validArgs} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
+import equalFileContents from 'equal-file-contents';
 
 const cwd = process.cwd();
 

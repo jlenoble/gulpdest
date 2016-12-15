@@ -4,8 +4,9 @@ import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import SimpleGulpDest from '../src/simple-gulpdest';
 import {SimpleGulpGlob} from 'gulpglob';
-import {invalidArgs, validArgs, equalFileContents} from './helpers';
+import {invalidArgs, validArgs} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
+import equalFileContents from 'equal-file-contents';
 
 chai.use(chaiAsPromised);
 

@@ -34,15 +34,14 @@ class SimpleGulpDest {
 
   _globArgs (stream, originalGlob) {
     return [destglob(originalGlob, this.destination), {
-        ready: () => {
-          return new Promise((resolve, reject) => {
-            stream.pipe(gulp.dest(this.destination))
-              .on('error', reject)
-              .on('end', resolve);
-          });
-        },
+      ready: () => {
+        return new Promise((resolve, reject) => {
+          stream.pipe(gulp.dest(this.destination))
+            .on('error', reject)
+            .on('end', resolve);
+        });
       },
-    ];
+    }];
   }
 
 }

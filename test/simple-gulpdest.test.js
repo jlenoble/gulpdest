@@ -1,14 +1,11 @@
 import path from 'path';
 import gulp from 'gulp';
-import chai, {expect} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import {expect} from 'chai';
 import SimpleGulpDest from '../src/simple-gulpdest';
 import {SimpleGulpGlob} from 'gulpglob';
 import {invalidArgs, validArgs} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
 import equalFileContents from 'equal-file-contents';
-
-chai.use(chaiAsPromised);
 
 describe('SimpleGulpDest is a class encapsulting gulp.dest', function() {
 

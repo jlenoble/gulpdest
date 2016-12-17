@@ -1,12 +1,9 @@
 import path from 'path';
 import gulp from 'gulp';
-import chai, {expect} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import {expect} from 'chai';
 import GulpDest from '../src/gulpdest';
 import GulpGlob from 'gulpglob';
 import {tmpDir} from 'cleanup-wrapper';
-
-chai.use(chaiAsPromised);
 
 describe('GulpDest is singleton class', function() {
 

@@ -1,12 +1,9 @@
 import GulpDest from '../src/gulpdest';
-import chai, {expect} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import {expect} from 'chai';
 import gulp from 'gulp';
 import path from 'path';
 import Muter, {muted} from 'muter';
 import equalStreamContents from 'equal-stream-contents';
-
-chai.use(chaiAsPromised);
 
 describe('Testing README.md examples', function() {
 
@@ -23,10 +20,12 @@ describe('Testing README.md examples', function() {
       return Promise.all([
         muted(muter, function() {
           const cwd = process.cwd();
-          return expect(gg.list()).to.eventually.eql([
-            path.join(cwd, 'build', 'src/gulpdest.js'),
-            path.join(cwd, 'build', 'src/simple-gulpdest.js'),
-          ]);
+          return gg.list().then(list => {
+            expect(list).to.eql([
+              path.join(cwd, 'build', 'src/gulpdest.js'),
+              path.join(cwd, 'build', 'src/simple-gulpdest.js'),
+            ]);
+          });
         })(),
         equalStreamContents(gg.src(), gulp.src(path.join('build', glob))),
       ]);

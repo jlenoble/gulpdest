@@ -30,8 +30,8 @@ SimpleGulpDest, ['literal'], [{
   properties: {
     destination: {
       get () {
-        return [[], ...this.map(el => el.destination)].reduce(
-          (array, dest) => array.concat(dest));
+        return this.map(el => el.destination).reduce(
+          (array, dest) => array.concat(dest), []);
       },
     },
   },

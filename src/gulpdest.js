@@ -8,7 +8,8 @@ const GulpDest = PolytonFactory( // eslint-disable-line new-cap
 SimpleGulpDest, ['literal'], [{
   unordered: true,
 }], {
-  preprocess: function (args) {
+  preprocess: function (_args) {
+    const args = _args.length ? _args : [[undefined]];
     let preArgs = [];
     args.forEach(dest => {
       let dst = dest[0];

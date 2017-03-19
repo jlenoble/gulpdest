@@ -33,15 +33,15 @@ describe('GulpDest is a class encapsulting gulp.dest', function () {
   it('A GulpDest instance can write streams', tmpDir(validArgs(), function () {
     this.timeout(5000); // eslint-disable-line no-invalid-this
     const glob = 'src/**/*.js';
-    const stream = gulp.src(glob);
+    const stream = gulp.src(glob, {base: process.cwd()});
     const dests = validArgs();
     const dst = new GulpDest(...dests);
 
     const glb = dst.dest(stream, glob);
 
     return glb.toPromise().then(globs => {
-      return Promise.all(globs.map((glob, i) => {
-        return equalFileContents(glob.glob, dests[i]);
+      return Promise.all(globs.map((_glb, i) => {
+        return equalFileContents(glob, dests[i]);
       }));
     });
   }));

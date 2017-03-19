@@ -35,14 +35,14 @@ describe('SimpleGulpDest is a class encapsulting gulp.dest', function () {
     validArgs().forEach(dest => {
       const func = function (dest) {
         const glob = 'src/**/*.js';
-        const stream = gulp.src(glob);
+        const stream = gulp.src(glob, {base: process.cwd()});
         const dst = new SimpleGulpDest(dest);
 
         const glb = dst.dest(stream, glob);
 
         return glb.toPromise().then(globs => {
-          return Promise.all(globs.map(glob => {
-            return equalFileContents(glob.glob, dest);
+          return Promise.all(globs.map(_glb => {
+            return equalFileContents(glob, dest);
           }));
         });
       };

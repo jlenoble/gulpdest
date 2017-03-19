@@ -8,17 +8,16 @@ import equalFileContents from 'equal-file-contents';
 
 const cwd = process.cwd();
 
-describe('GulpDest is a class encapsulting gulp.dest', function() {
-
+describe('GulpDest is a class encapsulting gulp.dest', function () {
   it(`A GulpDest instance can't be initialized from an invalid dest argument`,
-    function() {
-      invalidArgs().forEach(arg => {
-        expect(() => new GulpDest(arg))
-          .to.throw(TypeError, /Invalid dest element:/);
-      });
+  function () {
+    invalidArgs().forEach(arg => {
+      expect(() => new GulpDest(arg))
+        .to.throw(TypeError, /Invalid dest element:/);
+    });
   });
 
-  it('A GulpDest instance has a non-writable member destination', function() {
+  it('A GulpDest instance has a non-writable member destination', function () {
     const args = validArgs();
     args.forEach(arg => {
       const dst = new GulpDest(arg);
@@ -31,8 +30,8 @@ describe('GulpDest is a class encapsulting gulp.dest', function() {
     });
   });
 
-  it('A GulpDest instance can write streams', tmpDir(validArgs(), function() {
-    this.timeout(5000);
+  it('A GulpDest instance can write streams', tmpDir(validArgs(), function () {
+    this.timeout(5000); // eslint-disable-line no-invalid-this
     const glob = 'src/**/*.js';
     const stream = gulp.src(glob);
     const dests = validArgs();
@@ -48,7 +47,7 @@ describe('GulpDest is a class encapsulting gulp.dest', function() {
   }));
 
   it('A GulpDest instance wraps unordered dests', tmpDir(['tmp1', 'tmp2'],
-  function() {
+  function () {
     const dests = ['tmp2', 'tmp1'];
     const revDests = ['tmp1', 'tmp2'];
 
@@ -66,5 +65,4 @@ describe('GulpDest is a class encapsulting gulp.dest', function() {
         .to.eql(dests.map(dest => [path.join(dest, glob)]));
     });
   }));
-
 });

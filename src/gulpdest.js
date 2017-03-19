@@ -4,7 +4,8 @@ import GulpGlob from 'gulpglob';
 import path from 'path';
 import isString from 'is-string';
 
-const GulpDest = PolytonFactory(SimpleGulpDest, ['literal'], [{
+const GulpDest = PolytonFactory( // eslint-disable-line new-cap
+SimpleGulpDest, ['literal'], [{
   unordered: true,
 }], {
   preprocess: function (args) {

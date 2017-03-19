@@ -5,10 +5,8 @@ import GulpDest from '../src/gulpdest';
 import GulpGlob from 'gulpglob';
 import {tmpDir} from 'cleanup-wrapper';
 
-describe('GulpDest is singleton class', function() {
-
-  it(`Instance returned by ctor is a singleton`, function() {
-
+describe('GulpDest is singleton class', function () {
+  it(`Instance returned by ctor is a singleton`, function () {
     const g1 = new GulpDest('build1');
     const g2 = new GulpDest('build2');
     const g3 = new GulpDest('build1');
@@ -32,12 +30,10 @@ describe('GulpDest is singleton class', function() {
     expect(g1.at(0)).not.to.equal(g5.at(1));
     expect(g1.at(0)).to.equal(g6.at(0));
     expect(g1.at(0)).not.to.equal(g6.at(1));
-
   });
 
   it(`Instance returned by 'dest' method is a singleton`, tmpDir(['build1',
-'build2'], function() {
-
+    'build2'], function () {
     const glob1 = 'src/**/*.js';
     const glob2 = 'test/**/*.js';
     const glob3 = ['src/**/*.js', 'test/**/*.js'];
@@ -67,26 +63,24 @@ describe('GulpDest is singleton class', function() {
     expect(g1.at(1)).to.equal(g4.at(1));
 
     return Promise.all([g1, g2, g3, g4].map(g => g.toPromise())).then(ggs => {
-        const [_g1, _g2, _g3, _g4] = ggs;
-        expect(_g1[0]).to.equal(g1.at(0));
-        expect(_g1[1]).to.equal(g1.at(1));
-        expect(_g2[0]).to.equal(g2.at(0));
-        expect(_g2[1]).to.equal(g2.at(1));
-        expect(_g3[0]).to.equal(g3.at(0));
-        expect(_g3[1]).to.equal(g3.at(1));
-        expect(_g4[0]).to.equal(g4.at(0));
-        expect(_g4[1]).to.equal(g4.at(1));
+      const [_g1, _g2, _g3, _g4] = ggs;
+      expect(_g1[0]).to.equal(g1.at(0));
+      expect(_g1[1]).to.equal(g1.at(1));
+      expect(_g2[0]).to.equal(g2.at(0));
+      expect(_g2[1]).to.equal(g2.at(1));
+      expect(_g3[0]).to.equal(g3.at(0));
+      expect(_g3[1]).to.equal(g3.at(1));
+      expect(_g4[0]).to.equal(g4.at(0));
+      expect(_g4[1]).to.equal(g4.at(1));
 
-        const gg1 = new GulpGlob('build1/src/**/*.js');
-        const gg2 = new GulpGlob('build2/src/**/*.js');
-        const gg3 = new GulpGlob('build1/test/**/*.js');
-        const gg4 = new GulpGlob('build2/test/**/*.js');
-        expect(gg1.at(0)).to.equal(_g1[0]);
-        expect(gg2.at(0)).to.equal(_g1[1]);
-        expect(gg3.at(0)).to.equal(_g2[0]);
-        expect(gg4.at(0)).to.equal(_g2[1]);
+      const gg1 = new GulpGlob('build1/src/**/*.js');
+      const gg2 = new GulpGlob('build2/src/**/*.js');
+      const gg3 = new GulpGlob('build1/test/**/*.js');
+      const gg4 = new GulpGlob('build2/test/**/*.js');
+      expect(gg1.at(0)).to.equal(_g1[0]);
+      expect(gg2.at(0)).to.equal(_g1[1]);
+      expect(gg3.at(0)).to.equal(_g2[0]);
+      expect(gg4.at(0)).to.equal(_g2[1]);
     });
-
   }));
-
 });

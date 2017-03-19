@@ -2,23 +2,22 @@ import path from 'path';
 import gulp from 'gulp';
 import {expect} from 'chai';
 import SimpleGulpDest from '../src/simple-gulpdest';
-import {SimpleGulpGlob} from 'gulpglob';
 import {invalidArgs, validArgs} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
 import equalFileContents from 'equal-file-contents';
 
-describe('SimpleGulpDest is a class encapsulting gulp.dest', function() {
-
-  it(`A SimpleGulpDest instance can't be initialized from an invalid dest argument`,
-    function() {
-      invalidArgs().forEach(arg => {
-        expect(() => new SimpleGulpDest(arg))
-          .to.throw(TypeError, /Invalid dest element:/);
-      });
+describe('SimpleGulpDest is a class encapsulting gulp.dest', function () {
+  it(`A SimpleGulpDest instance can't be initialized from an invalid dest` +
+  `argument`,
+  function () {
+    invalidArgs().forEach(arg => {
+      expect(() => new SimpleGulpDest(arg))
+        .to.throw(TypeError, /Invalid dest element:/);
+    });
   });
 
   it('A SimpleGulpDest instance has a non-writable member destination',
-  function() {
+  function () {
     const args = validArgs();
     args.forEach(arg => {
       const dst = new SimpleGulpDest(arg);
@@ -30,8 +29,8 @@ describe('SimpleGulpDest is a class encapsulting gulp.dest', function() {
   });
 
   it('A SimpleGulpDest instance can write streams', tmpDir(validArgs(),
-  function() {
-    this.timeout(5000);
+  function () {
+    this.timeout(5000); // eslint-disable-line no-invalid-this
     let run = Promise.resolve();
     validArgs().forEach(dest => {
       const func = function (dest) {
@@ -51,5 +50,4 @@ describe('SimpleGulpDest is a class encapsulting gulp.dest', function() {
     });
     return run;
   }));
-
 });

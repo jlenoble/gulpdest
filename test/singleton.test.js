@@ -9,27 +9,37 @@ describe('GulpDest is singleton class', function () {
   it(`Instance returned by ctor is a singleton`, function () {
     const g1 = new GulpDest('build1');
     const g2 = new GulpDest('build2');
+
     const g3 = new GulpDest('build1');
     const g4 = new GulpDest(path.join(process.cwd(), 'build1'));
-    const g5 = new GulpDest('build1', 'build2');
-    const g6 = new GulpDest('build1', path.join(process.cwd(), 'build1'));
 
     expect(g1).not.to.equal(g2);
     expect(g1).to.equal(g3);
     expect(g1).to.equal(g4);
-    expect(g1).not.to.equal(g5);
-    expect(g1).to.equal(g6);
-
-    expect(g5.length).to.equal(2);
-    expect(g6.length).to.equal(1);
-
     expect(g1.at(0)).not.to.equal(g2.at(0));
-    expect(g1.at(0)).to.equal(g3.at(0));
-    expect(g1.at(0)).to.equal(g4.at(0));
+
+    const g5 = new GulpDest('build1', 'build2');
+
+    expect(g1).not.to.equal(g5);
+    expect(g5.length).to.equal(2);
     expect(g1.at(0)).to.equal(g5.at(0));
     expect(g1.at(0)).not.to.equal(g5.at(1));
+    expect(g2.at(0)).to.equal(g5.at(1));
+
+    const g6 = new GulpDest('build1', path.join(process.cwd(), 'build1'));
+
+    expect(g6.length).to.equal(1);
     expect(g1.at(0)).to.equal(g6.at(0));
     expect(g1.at(0)).not.to.equal(g6.at(1));
+    expect(g1).to.equal(g6);
+
+    const g7 = new GulpDest(g1);
+    const g8 = new GulpDest(g1, g2);
+    const g9 = new GulpDest(g2, g1);
+
+    expect(g1).to.equal(g7);
+    expect(g5).to.equal(g8);
+    expect(g5).to.equal(g9);
   });
 
   it(`Instance returned by 'dest' method is a singleton`, tmpDir(['build1',

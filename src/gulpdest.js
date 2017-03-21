@@ -21,6 +21,9 @@ SimpleGulpDest, ['literal'], [{
         if (!preArgs.includes(dst)) {
           preArgs.push(dst);
         }
+      } else if (dst && dst.elements && dst.elements.every(el => el instanceof
+        SimpleGulpDest)) {
+        preArgs = preArgs.concat(dst.destination);
       } else {
         throw new TypeError('Invalid dest element: "' + dst + '"');
       }

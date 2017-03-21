@@ -31,8 +31,8 @@
     "chai": "^3.5.0",
     "cleanup-wrapper": "^0.2.0",
     "del": "^2.2.1",
-    "equal-file-contents": "^0.1.0",
-    "equal-stream-contents": "^0.1.1",
+    "equal-file-contents": "^0.1.5",
+    "equal-stream-contents": "^0.1.3",
     "eslint-config-google": "^0.7.0",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "gulp-babel": "^6.1.2",
@@ -42,13 +42,15 @@
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
+    "gulpglob": "^0.3.0",
     "muter": "^0.5.2",
     "plumb-gulp": "^0.1.0"
   },
   "dependencies": {
     "destglob": "^0.1.0",
-    "equal-file-contents": "^0.1.1",
-    "gulpglob": "^0.2.3",
     "is-string": "^1.0.4"
+  },
+  "peerDependencies": {
+    "gulpglob": "0.x"
   }
 }

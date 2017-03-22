@@ -51,3 +51,4 @@ SimpleGulpDest, ['literal'], [{
 });
 
 export default GulpDest;
+export {SimpleGulpDest};

@@ -43,12 +43,11 @@
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.6.0",
-    "gulpglob": "^0.6.1",
+    "gulpglob": "^0.6.2",
     "muter": "^0.6.0",
     "plumb-gulp": "^0.1.0"
   },
   "dependencies": {
-    "destglob": "^0.1.0",
     "is-string": "^1.0.4"
   },
   "peerDependencies": {

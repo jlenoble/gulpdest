@@ -45,8 +45,12 @@ export class SimpleGulpDest {
 const GulpDest = SingletonFactory(SimpleGulpDest, // eslint-disable-line new-cap
   ['literal'], {
     preprocess ([dst]) {
-      checkDest(dst);
-      return [path.isAbsolute(dst) ? dst : path.join(process.cwd(), dst)];
+      let dest = dst;
+      if (dst instanceof SimpleGulpDest) {
+        dest = dest.destination;
+      }
+      checkDest(dest);
+      return [path.isAbsolute(dest) ? dest : path.join(process.cwd(), dest)];
     },
   });
 

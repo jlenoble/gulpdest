@@ -1,5 +1,5 @@
-import path from 'path';
 import gulp from 'gulp';
+import path from 'path';
 import {expect} from 'chai';
 import GulpDest from '../src/gulpdest';
 import {invalidArgs, validArgs} from './helpers';
@@ -10,59 +10,36 @@ const cwd = process.cwd();
 
 describe('GulpDest is a class encapsulting gulp.dest', function () {
   it(`A GulpDest instance can't be initialized from an invalid dest argument`,
-  function () {
-    invalidArgs().forEach(arg => {
-      expect(() => new GulpDest(arg))
-        .to.throw(TypeError, /Invalid dest element:/);
+    function () {
+      invalidArgs().forEach(arg => {
+        expect(() => new GulpDest(arg))
+          .to.throw(TypeError, /Invalid dest element:/);
+      });
     });
-  });
 
   it('A GulpDest instance has a non-writable member destination', function () {
-    const args = validArgs();
-    args.forEach(arg => {
+    validArgs().forEach(arg => {
       const dst = new GulpDest(arg);
-      let dsts = Array.isArray(arg) ? arg : [arg];
-      dsts = dsts.map(d => path.relative(cwd, d));
-      expect(dst.destination).to.eql(dsts);
+      expect(dst.destination).to.equal(path.relative(cwd, arg));
       expect(() => {
         dst.destination = 'tmp';
-      }).to.throw(TypeError, /Cannot set property destination/);
+      }).to.throw(TypeError,
+        /Cannot assign to read only property 'destination'/);
     });
   });
 
   it('A GulpDest instance can write streams', tmpDir(validArgs(), function () {
     this.timeout(5000); // eslint-disable-line no-invalid-this
     const glob = 'src/**/*.js';
-    const stream = gulp.src(glob, {base: process.cwd()});
-    const dests = validArgs();
-    const dst = new GulpDest(...dests);
-
-    const glb = dst.dest(stream, glob);
-
-    return glb.toPromise().then(globs => {
-      return Promise.all(globs.map((_glb, i) => {
-        return equalFileContents(glob, dests[i]);
-      }));
+    const args = validArgs();
+    const dests = args.map(arg => {
+      const stream = gulp.src(glob, {base: cwd});
+      return (new GulpDest(arg)).dest(stream, {glob});
     });
-  }));
 
-  it('A GulpDest instance wraps unordered dests', tmpDir(['tmp1', 'tmp2'],
-  function () {
-    const dests = ['tmp2', 'tmp1'];
-    const revDests = ['tmp1', 'tmp2'];
-
-    const dst = new GulpDest(...dests);
-    const revDst = new GulpDest(...revDests);
-
-    expect(dst).to.equal(revDst);
-
-    const glob = 'src/**/*.js';
-    const stream = gulp.src(glob);
-    const glb = dst.dest(stream, glob);
-
-    return glb.toPromise().then(globs => {
-      expect(globs.map(glb => glb.glob))
-        .to.eql(dests.map(dest => [path.join(dest, glob)]));
-    });
+    return Promise.all(dests.map((dest, i) => {
+      return dest.isReady().then(() =>
+        equalFileContents(dest.glob, args[i]));
+    }));
   }));
 });

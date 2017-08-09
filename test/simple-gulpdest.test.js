@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import {expect} from 'chai';
-import SimpleGulpDest from '../src/simple-gulpdest';
+import {SimpleGulpDest} from '../src/gulpdest';
 import {invalidArgs, validArgs} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
 import equalFileContents from 'equal-file-contents';
@@ -36,7 +36,13 @@ describe('SimpleGulpDest is a class encapsulting gulp.dest', function () {
           const stream = gulp.src(glob, {base: process.cwd()});
           const dst = new SimpleGulpDest(dest);
 
-          const glb = dst.dest(stream, {glob});
+          const glb = dst.dest(stream, {glob, ready: () => {
+            return new Promise((resolve, reject) => {
+              stream.pipe(gulp.dest(dest))
+                .on('error', reject)
+                .on('end', resolve);
+            });
+          }});
 
           return glb.toPromise().then(glb => {
             return equalFileContents(glb.glob, dest);

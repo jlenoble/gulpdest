@@ -1,54 +1,53 @@
-import SimpleGulpDest from './simple-gulpdest';
-import {PolytonFactory} from 'polyton';
+import isString from 'is-string';
+import gulp from 'gulp';
 import GulpGlob from 'gulpglob';
 import path from 'path';
-import isString from 'is-string';
+import {SingletonFactory} from 'singletons';
 
-const GulpDest = PolytonFactory( // eslint-disable-line new-cap
-SimpleGulpDest, ['literal'], [{
-  unordered: true,
-}], {
-  preprocess: function (_args) {
-    const args = _args.length ? _args : [[undefined]];
-    let preArgs = [];
-    args.forEach(dest => {
-      let dst = dest[0];
-      if (dest.length !== 1) {
-        dst = dest;
-      }
-      if (isString(dst) && dst !== '') {
-        dst = path.relative(process.cwd(), dst);
-        if (!preArgs.includes(dst)) {
-          preArgs.push(dst);
-        }
-      } else if (dst && dst.elements && dst.elements.every(el => el instanceof
-        SimpleGulpDest)) {
-        preArgs = preArgs.concat(dst.destination);
-      } else {
-        throw new TypeError('Invalid dest element: "' + dst + '"');
-      }
-    });
-    return preArgs.map(arg => [arg]);
-  },
-  properties: {
-    destination: {
-      get () {
-        return this.map(el => el.destination).reduce(
-          (array, dest) => array.concat(dest), []);
+const checkDest = dst => {
+  if (!isString(dst) || dst === '') {
+    throw new TypeError('Invalid dest element: "' + dst + '"');
+  }
+};
+
+export class SimpleGulpDest {
+  constructor (dst) {
+    checkDest(dst);
+
+    const _base = process.cwd();
+    const _dest = path.relative(_base, dst);
+
+    Object.defineProperties(this, {
+      destination: {
+        value: _dest,
       },
-    },
-  },
-  extend: {
-    dest (stream, glob) {
-      const cwd = process.cwd();
-      let glb = Array.isArray(glob) ? glob : [glob];
-      glb = glb.map(gl => path.relative(cwd, gl));
+      base: {
+        value: _base,
+      },
+    });
+  }
 
-      return new GulpGlob(...this.map(dest =>
-        dest._globArgs(stream, glb)));
+  dest (stream, {glob, cwd, base} = {}) {
+    const glb = new GulpGlob([glob, {cwd, base}]);
+
+    return glb.dest(this.destination, {
+      ready: () => {
+        return new Promise((resolve, reject) => {
+          stream.pipe(gulp.dest(this.destination))
+            .on('error', reject)
+            .on('end', resolve);
+        });
+      },
+    });
+  }
+}
+
+const GulpDest = SingletonFactory(SimpleGulpDest, // eslint-disable-line new-cap
+  ['literal'], {
+    preprocess ([dst]) {
+      checkDest(dst);
+      return [path.isAbsolute(dst) ? dst : path.join(process.cwd(), dst)];
     },
-  },
-});
+  });
 
 export default GulpDest;
-export {SimpleGulpDest};

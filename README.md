@@ -14,7 +14,7 @@ const dest = new GulpDest('build');
 const glob = 'src/**/*.js';
 const stream = gulp.src(glob);
 
-const gg = dest.dest(stream, glob); // Writes stream to 'build' and returns a GulpGlob object
+const gg = dest.dest(stream, {glob}); // Writes stream to 'build' and returns a GulpGlob object
 gg.list(); // Lists the new files
 gg.src(); // Sources the new files
 ```

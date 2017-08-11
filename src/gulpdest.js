@@ -14,15 +14,10 @@ export class SimpleGulpDest {
   constructor (dst) {
     checkDest(dst);
 
-    const _base = process.cwd();
-    const _dest = path.relative(_base, dst);
-
     Object.defineProperties(this, {
       destination: {
-        value: _dest,
-      },
-      base: {
-        value: _base,
+        value: path.isAbsolute(dst) ? dst : path.join(process.cwd(),
+          path.relative(process.cwd(), dst)),
       },
     });
   }
@@ -48,9 +43,13 @@ const GulpDest = SingletonFactory(SimpleGulpDest, // eslint-disable-line new-cap
       let dest = dst;
       if (dst instanceof SimpleGulpDest) {
         dest = dest.destination;
+      } else {
+        checkDest(dest);
+        if (!path.isAbsolute(dest)) {
+          dest = path.join(process.cwd(), dest);
+        }
       }
-      checkDest(dest);
-      return [path.isAbsolute(dest) ? dest : path.join(process.cwd(), dest)];
+      return [dest];
     },
   });
 

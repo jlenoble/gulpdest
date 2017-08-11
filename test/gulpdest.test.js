@@ -20,7 +20,8 @@ describe('GulpDest is a class encapsulting gulp.dest', function () {
   it('A GulpDest instance has a non-writable member destination', function () {
     validArgs().forEach(arg => {
       const dst = new GulpDest(arg);
-      expect(dst.destination).to.equal(path.relative(cwd, arg));
+      expect(dst.destination).to.equal(path.join(process.cwd(),
+        path.relative(cwd, arg)));
       expect(() => {
         dst.destination = 'tmp';
       }).to.throw(TypeError,

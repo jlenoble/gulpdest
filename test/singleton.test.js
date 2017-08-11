@@ -48,9 +48,9 @@ describe('GulpDest is singleton class', function () {
     return Promise.all([g1, g2, g3, g4].map(g => g.toPromise())).then(ggs => {
       const [_g1, _g2, _g3, _g4] = ggs;
 
-      const gg1 = new GulpGlob([glob1, {cwd: 'build1', base: 'build1'}]);
-      const gg2 = new GulpGlob([glob2, {cwd: 'build1', base: 'build1'}]);
-      const gg3 = new GulpGlob([glob3, {cwd: 'build1', base: 'build1'}]);
+      const gg1 = new GulpGlob([glob1, {cwd: 'build1'}]);
+      const gg2 = new GulpGlob([glob2, {cwd: 'build1'}]);
+      const gg3 = new GulpGlob([glob3, {cwd: 'build1'}]);
 
       expect(gg1).to.equal(_g1);
       expect(gg2).to.equal(_g2);

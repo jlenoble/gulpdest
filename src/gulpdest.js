@@ -1,8 +1,9 @@
 import isString from 'is-string';
 import gulp from 'gulp';
 import fs from 'fs';
-import nodeGlob from 'glob';
+import through from 'through2';
 import GulpGlob from 'gulpglob';
+import PolyPath from 'polypath';
 import path from 'path';
 import {SingletonFactory} from 'singletons';
 
@@ -27,37 +28,35 @@ export class SimpleGulpDest {
   dest (stream, {glob, cwd, base} = {}) {
     const glb = new GulpGlob([glob, {cwd, base}]);
 
-    const destGlb = glb.dest(this.destination, {
+    return glb.dest(this.destination, {
       ready: () => {
         return new Promise((resolve, reject) => {
+          const files = [];
           stream
+            .pipe(through.obj(function (file, enc, callback) {
+              if (file.path) {
+                files.push(file.path);
+              }
+              callback(null, file);
+            }))
             .pipe(gulp.dest(this.destination))
             .on('error', reject)
-            .on('end', resolve);
-        }).then(() => Promise.all(destGlb.paths.map(path => {
+            .on('end', () => {
+              resolve(new PolyPath(...files).rebase(this.destination).paths);
+            });
+        }).then(files => Promise.all(files.map(file => {
           return new Promise((resolve, reject) => {
-            nodeGlob(path, (err, files) => {
+            const date = new Date();
+            fs.utimes(file, date, date, err => {
               if (err) {
                 return reject(err);
               }
-              return Promise.all(files.map(file => {
-                return new Promise((resolve, reject) => {
-                  const date = new Date();
-                  fs.utimes(file, date, date, err => {
-                    if (err) {
-                      return reject(err);
-                    }
-                    resolve();
-                  });
-                });
-              })).then(resolve, reject);
+              resolve();
             });
           });
         })));
       },
     });
-
-    return destGlb;
   }
 }
 

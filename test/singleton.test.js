@@ -7,11 +7,11 @@ import {tmpDir} from 'cleanup-wrapper';
 
 describe('GulpDest is singleton class', function () {
   it(`Instance returned by ctor is a singleton`, function () {
-    const g1 = new GulpDest('build1');
-    const g2 = new GulpDest('build2');
+    const g1 = new GulpDest('build6');
+    const g2 = new GulpDest('build7');
 
-    const g3 = new GulpDest('build1');
-    const g4 = new GulpDest(path.join(process.cwd(), 'build1'));
+    const g3 = new GulpDest('build6');
+    const g4 = new GulpDest(path.join(process.cwd(), 'build6'));
 
     expect(g1).not.to.equal(g2);
     expect(g1).to.equal(g3);
@@ -23,18 +23,18 @@ describe('GulpDest is singleton class', function () {
   });
 
   it(`Instance returned by 'dest' method is a singleton`, tmpDir([
-    'build1'], function () {
+    'build6'], function () {
     const glob1 = 'src/**/*.js';
     const glob2 = 'test/**/*.js';
-    const glob3 = ['src/**/*.js', 'test/**/*.js'];
+    const glob3 = ['src/**/*.js', 'test/**/*.js', 'gulp/**/*.js'];
     const glob4 = path.join(process.cwd(), 'src/**/*.js');
 
-    const stream1 = gulp.src(glob1);
-    const stream2 = gulp.src(glob2);
-    const stream3 = gulp.src(glob3);
-    const stream4 = gulp.src(glob4);
+    const stream1 = gulp.src(glob1, {base: process.cwd()});
+    const stream2 = gulp.src(glob2, {base: process.cwd()});
+    const stream3 = gulp.src(glob3, {base: process.cwd()});
+    const stream4 = gulp.src(glob4, {base: process.cwd()});
 
-    const dest = new GulpDest('build1');
+    const dest = new GulpDest('build6');
 
     const g1 = dest.dest(stream1, {glob: glob1});
     const g2 = dest.dest(stream2, {glob: glob2});
@@ -48,9 +48,9 @@ describe('GulpDest is singleton class', function () {
     return Promise.all([g1, g2, g3, g4].map(g => g.toPromise())).then(ggs => {
       const [_g1, _g2, _g3, _g4] = ggs;
 
-      const gg1 = new GulpGlob([glob1, {cwd: 'build1'}]);
-      const gg2 = new GulpGlob([glob2, {cwd: 'build1'}]);
-      const gg3 = new GulpGlob([glob3, {cwd: 'build1'}]);
+      const gg1 = new GulpGlob([glob1, {cwd: 'build6'}]);
+      const gg2 = new GulpGlob([glob2, {cwd: 'build6'}]);
+      const gg3 = new GulpGlob([glob3, {cwd: 'build6'}]);
 
       expect(gg1).to.equal(_g1);
       expect(gg2).to.equal(_g2);

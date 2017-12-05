@@ -1,5 +1,7 @@
 import isString from 'is-string';
 import gulp from 'gulp';
+import fs from 'fs';
+import nodeGlob from 'glob';
 import GulpGlob from 'gulpglob';
 import path from 'path';
 import {SingletonFactory} from 'singletons';
@@ -25,15 +27,37 @@ export class SimpleGulpDest {
   dest (stream, {glob, cwd, base} = {}) {
     const glb = new GulpGlob([glob, {cwd, base}]);
 
-    return glb.dest(this.destination, {
+    const destGlb = glb.dest(this.destination, {
       ready: () => {
         return new Promise((resolve, reject) => {
-          stream.pipe(gulp.dest(this.destination))
+          stream
+            .pipe(gulp.dest(this.destination))
             .on('error', reject)
             .on('end', resolve);
-        });
+        }).then(() => Promise.all(destGlb.paths.map(path => {
+          return new Promise((resolve, reject) => {
+            nodeGlob(path, (err, files) => {
+              if (err) {
+                return reject(err);
+              }
+              return Promise.all(files.map(file => {
+                return new Promise((resolve, reject) => {
+                  const date = new Date();
+                  fs.utimes(file, date, date, err => {
+                    if (err) {
+                      return reject(err);
+                    }
+                    resolve();
+                  });
+                });
+              })).then(resolve, reject);
+            });
+          });
+        })));
       },
     });
+
+    return destGlb;
   }
 }
 

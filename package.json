@@ -37,22 +37,23 @@
     "eslint-config-google": "^0.9.1",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "gulp-babel": "^7.0.0",
+    "gulp-debug": "^3.1.0",
     "gulp-diff": "^1.0.0",
     "gulp-eslint": "^4.0.0",
     "gulp-mocha": "^4.3.1",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.6.1",
-    "gulpglob": "^0.6.5",
+    "gulpglob": "^0.6.6",
     "muter": "^0.6.0",
     "plumb-gulp": "^0.1.0",
     "stat-again": "^0.3.0"
   },
   "dependencies": {
-    "glob": "^7.1.2",
-    "is-string": "^1.0.4"
+    "is-string": "^1.0.4",
+    "through2": "^2.0.3"
   },
   "peerDependencies": {
-    "gulpglob": "0.x"
+    "gulpglob": ">=0.6.6"
   }
 }

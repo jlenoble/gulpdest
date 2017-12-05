@@ -42,7 +42,11 @@ export class SimpleGulpDest {
             .pipe(gulp.dest(this.destination))
             .on('error', reject)
             .on('end', () => {
-              resolve(new PolyPath(...files).rebase(this.destination).paths);
+              if (files.length) {
+                resolve(new PolyPath(...files).rebase(this.destination).paths);
+              } else {
+                resolve([]);
+              }
             });
         }).then(files => Promise.all(files.map(file => {
           return new Promise((resolve, reject) => {

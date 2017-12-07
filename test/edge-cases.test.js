@@ -2,7 +2,6 @@ import GulpDest from '../src/gulpdest';
 import {expect} from 'chai';
 import gulp from 'gulp';
 import newer from 'gulp-newer';
-import debug from 'gulp-debug';
 import {tmpDir} from 'cleanup-wrapper';
 
 describe('Testing edge cases', function () {
@@ -20,7 +19,7 @@ describe('Testing edge cases', function () {
   it(`Desting empty stream`, tmpDir('build8', function () {
     const glob = 'src/gulpdest.js';
     const stream = gulp.src(glob, {base: process.cwd()})
-      .pipe(newer(process.cwd())).pipe(debug()); // Empties stream
+      .pipe(newer(process.cwd())); // Empties stream
 
     // Used to throw with error TypeError: Expected a string, got undefined
     // Due to lack of files passed internally to PolyPath

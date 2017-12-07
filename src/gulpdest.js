@@ -78,7 +78,19 @@ export class SimpleGulpDest {
               });
             };
 
-            openFile(file);
+            const isFile = file => {
+              fs.stat(file, (err, stats) => {
+                if (err) {
+                  return reject(err);
+                }
+                if (!stats.isFile()) {
+                  return resolve(file);
+                }
+                openFile(file);
+              });
+            };
+
+            isFile(file);
           });
         })));
       },

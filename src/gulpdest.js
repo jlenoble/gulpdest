@@ -50,13 +50,35 @@ export class SimpleGulpDest {
             });
         }).then(files => Promise.all(files.map(file => {
           return new Promise((resolve, reject) => {
-            const date = new Date();
-            fs.utimes(file, date, date, err => {
-              if (err) {
-                return reject(err);
-              }
-              resolve();
-            });
+            const closeFile = fd => {
+              fs.close(fd, err => {
+                if (err) {
+                  return reject(err);
+                }
+                resolve(file);
+              });
+            };
+
+            const touchFile = fd => {
+              const date = new Date();
+              fs.futimes(fd, date, date, err => {
+                if (err) {
+                  reject(err);
+                } // Don't return, do close
+                closeFile(fd);
+              });
+            };
+
+            const openFile = file => {
+              fs.open(file, 'r+', (err, fd) => {
+                if (err) {
+                  return reject(err);
+                }
+                touchFile(fd);
+              });
+            };
+
+            openFile(file);
           });
         })));
       },

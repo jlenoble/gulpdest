@@ -44,14 +44,15 @@
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.6.1",
-    "gulpglob": "^0.6.6",
+    "gulpglob": "^0.7.0",
     "muter": "^0.6.0",
     "plumb-gulp": "^0.1.0",
     "stat-again": "^0.3.0"
   },
   "dependencies": {
     "is-string": "^1.0.4",
-    "through2": "^2.0.3"
+    "through2": "^2.0.3",
+    "touch-ms": "^0.1.0"
   },
   "peerDependencies": {
     "gulpglob": ">=0.6.6"
